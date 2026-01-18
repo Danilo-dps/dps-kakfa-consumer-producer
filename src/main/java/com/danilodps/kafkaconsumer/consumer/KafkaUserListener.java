@@ -14,7 +14,7 @@ public class KafkaUserListener {
 
     private final UserService userService;
 
-    @KafkaListener(groupId = "consumer-group", topics = "topic.user.v1", containerFactory = "listenerContainerFactory")
+    @KafkaListener(groupId = "consumer-group", topics = "topic-user-v1", containerFactory = "listenerContainerFactory")
     public void consumer(UserResponse userResponse){
         try {
             log.info("name: {}, lastName: {}", userResponse.name(), userResponse.lastName());
