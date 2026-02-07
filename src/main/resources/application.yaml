@@ -25,7 +25,9 @@ spring:
       group-id: consumer-group-v1
       auto-offset-reset: earliest
     topic:
-      kafka-topic: "topic-user-v1"
+      kafka-created: "topic-user-created"
+      kafka-updated: "topic-user-updated"
+      kafka-deleted: "topic-user-deleted"
 
 server:
   port: 8082

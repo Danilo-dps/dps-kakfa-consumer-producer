@@ -6,9 +6,11 @@ import org.springframework.kafka.annotation.EnableKafka;
 
 @EnableKafka
 @SpringBootApplication
-public class DpsKafkaConsumerProducerApplication {
+public class DpsKafkaConsumerApplication {
+
+	private DpsKafkaConsumerApplication(){}
 
 	static void main(String[] args) {
-		SpringApplication.run(DpsKafkaConsumerProducerApplication.class, args);
+		SpringApplication.run(DpsKafkaConsumerApplication.class, args);
 	}
 }

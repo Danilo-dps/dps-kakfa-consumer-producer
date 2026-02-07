@@ -1,4 +1,4 @@
-package com.danilodps.kafkaconsumer.config;
+package com.danilodps.kafkaconsumer.application.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

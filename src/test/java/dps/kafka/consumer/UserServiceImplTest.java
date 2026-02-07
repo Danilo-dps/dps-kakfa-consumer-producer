@@ -1,10 +1,11 @@
 package dps.kafka.consumer;
 
-import com.danilodps.kafkaconsumer.adapter.UserResponse2UserEntity;
-import com.danilodps.kafkaconsumer.entity.UserEntity;
-import com.danilodps.kafkaconsumer.record.received.UserResponse;
-import com.danilodps.kafkaconsumer.repository.UserEntityRepository;
-import com.danilodps.kafkaconsumer.service.impl.UserServiceImpl;
+import com.danilodps.kafkaconsumer.domain.adapter.UserResponse2UserEntity;
+import com.danilodps.kafkaconsumer.domain.entity.UserEntity;
+import com.danilodps.kafkaconsumer.domain.record.received.UserResponse;
+import com.danilodps.kafkaconsumer.domain.repository.UserEntityRepository;
+import com.danilodps.kafkaconsumer.domain.service.impl.UserServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +15,6 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -34,13 +34,13 @@ class UserServiceImplTest {
     void setup(){
 
         userEntity = UserEntity.builder()
-                .userId(UUID.fromString("871982fe-57a2-4eab-af9f-97e880ee2cbf"))
+                .userId(("871982fe-57a2-4eab-af9f-97e880ee2cbf"))
                 .fullName("Danilo" + " Pereira")
                 .createdAt(LocalDateTime.now())
                 .build();
 
         userResponse = UserResponse.builder()
-                .userId(userEntity.getUserId().toString())
+                .userId(userEntity.getUserId())
                 .name(userEntity.getFullName())
                 .build();
 
@@ -60,5 +60,7 @@ class UserServiceImplTest {
         }
 
         verify(userEntityRepository, atLeastOnce()).saveAndFlush(any(UserEntity.class));
+        Assertions.assertEquals("Danilo Pereira", userEntity.getFullName());
+        Assertions.assertNotNull(userEntity.getCreatedAt());
     }
 }

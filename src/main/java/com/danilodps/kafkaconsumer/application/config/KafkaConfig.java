@@ -1,6 +1,6 @@
-package com.danilodps.kafkaconsumer.config;
+package com.danilodps.kafkaconsumer.application.config;
 
-import com.danilodps.kafkaconsumer.record.received.UserResponse;
+import com.danilodps.kafkaconsumer.domain.record.received.UserResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
