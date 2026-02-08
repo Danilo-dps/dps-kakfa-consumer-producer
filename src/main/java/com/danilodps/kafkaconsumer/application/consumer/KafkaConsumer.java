@@ -1,9 +1,11 @@
 package com.danilodps.kafkaconsumer.application.consumer;
 
+import com.danilodps.kafkaconsumer.application.exception.BusinessException;
 import com.danilodps.kafkaconsumer.domain.record.received.UserResponse;
 import com.danilodps.kafkaconsumer.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.BackOff;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -22,10 +24,10 @@ public class KafkaConsumer {
     private final UserService userService;
 
     @RetryableTopic(
-            backOff = @BackOff(delay = 2000),
+            backOff = @BackOff(delay = 1000),
             kafkaTemplate = "producerKafkaTemplateRetry",
             listenerContainerFactory = "listenerContainerFactoryRetry",
-            include = {RuntimeException.class},
+            include = {BusinessException.class},
             autoCreateTopics = "false",
             topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE,
             dltStrategy = DltStrategy.FAIL_ON_ERROR
@@ -38,16 +40,17 @@ public class KafkaConsumer {
     public void consumerCreate(UserResponse userResponse){
         try {
             userService.create(userResponse);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception ex) {
+            log.error("Erro no consumo do tópico de criação: {}", "topic-user-created");
+            throw new BusinessException(ex.getMessage(), HttpStatus.UNPROCESSABLE_CONTENT);
         }
     }
 
     @RetryableTopic(
-            backOff = @BackOff(delay = 2000),
+            backOff = @BackOff(delay = 1000),
             kafkaTemplate = "producerKafkaTemplateRetry",
             listenerContainerFactory = "listenerContainerFactoryRetry",
-            include = {RuntimeException.class},
+            include = {BusinessException.class},
             autoCreateTopics = "false",
             topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE,
             dltStrategy = DltStrategy.FAIL_ON_ERROR
@@ -61,16 +64,17 @@ public class KafkaConsumer {
         try {
             log.info("Solicitação de atualização");
             userService.update(userResponse);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception ex) {
+            log.error("Erro no consumo do tópico de atualização: {}", "topic-user-updated");
+            throw new BusinessException(ex.getMessage(), HttpStatus.UNPROCESSABLE_CONTENT);
         }
     }
 
     @RetryableTopic(
-            backOff = @BackOff(delay = 2000),
+            backOff = @BackOff(delay = 1000),
             kafkaTemplate = "producerKafkaTemplateRetry",
             listenerContainerFactory = "listenerContainerFactoryRetry",
-            include = {RuntimeException.class},
+            include = {BusinessException.class},
             autoCreateTopics = "false",
             topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE,
             dltStrategy = DltStrategy.FAIL_ON_ERROR
@@ -84,8 +88,9 @@ public class KafkaConsumer {
         try {
             log.info("Solicitação de exclusão");
             userService.delete(userResponse);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception ex) {
+            log.error("Erro no consumo do tópico de exclusão: {}", "topic-user-deleted");
+            throw new BusinessException(ex.getMessage(), HttpStatus.UNPROCESSABLE_CONTENT);
         }
     }
 
