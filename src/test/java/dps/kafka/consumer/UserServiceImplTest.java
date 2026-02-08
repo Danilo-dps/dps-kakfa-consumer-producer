@@ -63,4 +63,24 @@ class UserServiceImplTest {
         Assertions.assertEquals("Danilo Pereira", userEntity.getFullName());
         Assertions.assertNotNull(userEntity.getCreatedAt());
     }
+
+    @Test
+    void testUpdateAUser() {
+
+        userService.update(userResponse);
+
+        verify(userEntityRepository, times(1)).update(
+                eq(userResponse.userId()),
+                anyString(),
+                any(LocalDateTime.class)
+        );
+    }
+
+    @Test
+    void testDeleteAUser() {
+
+        userService.delete(userResponse);
+
+        verify(userEntityRepository, times(1)).delete(userResponse.userId());
+    }
 }
